@@ -53,8 +53,12 @@ npm run dev
 
 1. Suba o repositório no GitHub.
 2. Importe o projeto na Vercel.
-3. Configure as variáveis de ambiente.
-4. Faça o deploy.
+3. Configure as variáveis de ambiente na Vercel:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+4. Faça um novo deploy depois de salvar as variáveis.
+
+Importante: na Vercel, variáveis novas ou alteradas só entram em vigor em deploys novos. Se o site já estava publicado antes da mudança, você precisa redeployar.
 
 ## Observação
 

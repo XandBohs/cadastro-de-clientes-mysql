@@ -38,7 +38,8 @@ export async function PUT(request: Request, { params }: Params) {
     return NextResponse.json({ data });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Erro inesperado.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const status = message.includes("not configured") ? 503 : 500;
+    return NextResponse.json({ error: message }, { status });
   }
 }
 
@@ -55,6 +56,7 @@ export async function DELETE(_: Request, { params }: Params) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Erro inesperado.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const status = message.includes("not configured") ? 503 : 500;
+    return NextResponse.json({ error: message }, { status });
   }
 }
