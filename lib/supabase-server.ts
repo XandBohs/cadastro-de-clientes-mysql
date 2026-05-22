@@ -1,8 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
-const supabaseKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 export function createSupabaseServerClient() {
   if (!supabaseUrl) {
@@ -13,7 +12,7 @@ export function createSupabaseServerClient() {
 
   if (!supabaseKey) {
     throw new Error(
-      "Supabase key is not configured. Set SUPABASE_SERVICE_ROLE_KEY in Vercel for server-side CRUD, or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY for read-only access."
+      "SUPABASE_SERVICE_ROLE_KEY is not configured. Set it in Vercel for server-side CRUD and redeploy."
     );
   }
 
