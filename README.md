@@ -26,10 +26,22 @@ Migração do CRUD em PHP/MySQL para uma app Next.js pronta para deploy na Verce
 
 Crie um arquivo `.env.local` com:
 
-- `SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 
-Use a service role apenas no servidor. Ela não deve ir para o browser.
+Use a publishable key no browser/SSR helper e a service role apenas no servidor. A service role não deve ir para o browser.
+
+## Supabase SSR helper
+
+Este projeto agora inclui a estrutura recomendada do `@supabase/ssr`:
+
+- `utils/supabase/server.ts`
+- `utils/supabase/client.ts`
+- `utils/supabase/middleware.ts`
+- `middleware.ts`
+
+Esses arquivos mantêm a sessão atualizada e deixam o projeto pronto para autenticação futura.
 
 ## Rodar localmente
 
