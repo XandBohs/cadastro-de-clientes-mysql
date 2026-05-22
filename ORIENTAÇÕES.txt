@@ -1,6 +1,6 @@
 1- Criar o projeto no Supabase
 2- Executar o script supabase/schema.sql no SQL Editor
-3- Configurar as variáveis SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY
+3- Configurar as variáveis NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
 4- Instalar dependências com npm install
 5- Rodar o projeto com npm run dev
 6- Fazer deploy do frontend na Vercel

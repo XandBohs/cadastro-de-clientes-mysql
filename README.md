@@ -28,9 +28,8 @@ Crie um arquivo `.env.local` com:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
 
-Use a publishable key no browser/SSR helper e a service role apenas no servidor. A service role não deve ir para o browser.
+Use a publishable key no browser e no servidor para este CRUD. Não há dependência de service role neste fluxo.
 
 ## Supabase SSR helper
 
