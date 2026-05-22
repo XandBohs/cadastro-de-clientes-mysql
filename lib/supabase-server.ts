@@ -13,7 +13,7 @@ export function createSupabaseServerClient() {
 
   if (!supabaseKey) {
     throw new Error(
-      "Supabase key is not configured. Set SUPABASE_SERVICE_ROLE_KEY or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY in Vercel and redeploy."
+      "Supabase key is not configured. Set SUPABASE_SERVICE_ROLE_KEY in Vercel for server-side CRUD, or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY for read-only access."
     );
   }
 
