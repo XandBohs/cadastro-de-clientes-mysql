@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Cadastro de clientes",
-  description: "CRUD de clientes com Supabase e Vercel."
+  title: "Cadastro de Clientes | Supabase + Vercel",
+  description: "Aplicação de cadastro de clientes com Supabase, Vercel e design responsivo."
 };
 
 export default function RootLayout({

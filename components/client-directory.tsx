@@ -54,42 +54,46 @@ export function ClientDirectory() {
   const [notice, setNotice] = useState<string | null>(null);
 
   const total = records.length;
-  const latest = useMemo(() => {
-    return records[0]?.dt ?? null;
-  }, [records]);
+  const latest = useMemo(() => records[0]?.dt ?? null, [records]);
 
-  const loadRecords = useCallback(async (nextFilters: Filters = filters) => {
-    setIsLoading(true);
-    setError(null);
+  const loadRecords = useCallback(
+    async (nextFilters: Filters = filters) => {
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const params = toSearchParams(nextFilters);
-      const queryString = params.toString();
-      const response = await fetch(`/api/clientes${queryString ? `?${queryString}` : ""}`, {
-        cache: "no-store"
-      });
+      try {
+        const params = toSearchParams(nextFilters);
+        const queryString = params.toString();
+        const response = await fetch(`/api/clientes${queryString ? `?${queryString}` : ""}`, {
+          cache: "no-store"
+        });
 
-      const payload = (await response.json()) as
-        | { data: Cliente[] }
-        | { error: string };
+        const payload = (await response.json()) as
+          | { data: Cliente[] }
+          | { error: string };
 
-      if (!response.ok) {
-        throw new Error("error" in payload ? payload.error : "Falha ao carregar registros.");
+        if (!response.ok) {
+          throw new Error("error" in payload ? payload.error : "Falha ao carregar registros.");
+        }
+
+        setRecords("data" in payload ? payload.data : []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Falha ao carregar registros.");
+      } finally {
+        setIsLoading(false);
       }
-
-      setRecords("data" in payload ? payload.data : []);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Falha ao carregar registros.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [filters]);
+    },
+    [filters]
+  );
 
   useEffect(() => {
     void loadRecords();
   }, [loadRecords]);
 
-  function onFieldChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, target: "form" | "filters") {
+  function onFieldChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    target: "form" | "filters"
+  ) {
     const { name, value } = event.target;
 
     if (target === "form") {
@@ -146,16 +150,13 @@ export function ClientDirectory() {
         throw new Error("Preencha nome, email e telefone.");
       }
 
-      const response = await fetch(
-        editingId ? `/api/clientes/${editingId}` : "/api/clientes",
-        {
-          method: editingId ? "PUT" : "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        }
-      );
+      const response = await fetch(editingId ? `/api/clientes/${editingId}` : "/api/clientes", {
+        method: editingId ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
 
       const body = (await response.json()) as { data?: Cliente; error?: string };
 
@@ -221,13 +222,25 @@ export function ClientDirectory() {
 
   return (
     <div className="app-shell">
+      <div className="page-rings" aria-hidden="true" />
+
+      <header className="topbar">
+        <div className="brand-lockup">
+          <span className="brand-kicker">Supabase + Vercel</span>
+          <strong>Cadastro de clientes</strong>
+        </div>
+        <div className="topbar-note">
+          CRUD público com banco em nuvem, deploy contínuo e interface responsiva.
+        </div>
+      </header>
+
       <header className="masthead">
-        <section className="hero">
-          <div className="eyebrow">Supabase + Vercel</div>
-          <h1>Cadastro de clientes</h1>
+        <section className="hero panel">
+          <div className="eyebrow">Sistema de clientes</div>
+          <h1>Uma base de dados limpa, rápida e pronta para uso público.</h1>
           <p>
-            Aplicação Next.js hospedada na Vercel, com banco no Supabase e rotas servidoras para
-            manter o acesso ao banco fora do browser.
+            Aplicação Next.js hospedada na Vercel, com persistência no Supabase e operações
+            completas de cadastro, edição, pesquisa e exclusão.
           </p>
           <div className="hero-meta">
             <span className="chip">Tabela: dadoscliente</span>
@@ -237,35 +250,40 @@ export function ClientDirectory() {
         </section>
 
         <aside className="status-panel panel sticky">
-          <h2>Status</h2>
+          <div className="panel-header compact">
+            <div>
+              <h2>Status</h2>
+              <p>Indicadores rápidos da base carregada na interface.</p>
+            </div>
+          </div>
           <div className="status-grid">
             <div className="stat-card">
+              <span>Clientes carregados</span>
               <strong>{total}</strong>
-              <span>clientes carregados</span>
             </div>
             <div className="stat-card">
+              <span>Registro em edição</span>
               <strong>{editingId ?? "—"}</strong>
-              <span>registro em edição</span>
             </div>
             <div className="stat-card">
+              <span>Último registro exibido</span>
               <strong>{latest ? formatDate(latest) : "—"}</strong>
-              <span>último registro exibido</span>
             </div>
           </div>
         </aside>
       </header>
 
-      <div className="toolbar">
-        <section className="panel">
+      <section className="workspace">
+        <article className="panel filter-panel">
           <div className="panel-header">
             <div>
               <h2>Filtros</h2>
-              <p>Busca por nome, email, telefone e intervalo de data usando a API do app.</p>
+              <p>Busca por nome, email, telefone e intervalo de data.</p>
             </div>
           </div>
 
-          <form className="form-grid" onSubmit={applyFilters}>
-            <div className="field-grid">
+          <form className="form-stack" onSubmit={applyFilters}>
+            <div className="field-grid filters-grid">
               <div className="field">
                 <label htmlFor="filter-nome">Nome</label>
                 <input
@@ -307,9 +325,6 @@ export function ClientDirectory() {
                   onChange={(event) => onFieldChange(event, "filters")}
                 />
               </div>
-            </div>
-
-            <div className="field-grid" style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}>
               <div className="field">
                 <label htmlFor="filter-dt">Data final</label>
                 <input
@@ -320,27 +335,25 @@ export function ClientDirectory() {
                   onChange={(event) => onFieldChange(event, "filters")}
                 />
               </div>
-              <div className="field" style={{ gridColumn: "span 3" }}>
-                <label>&nbsp;</label>
-                <div className="button-row">
-                  <button className="button primary" type="submit" disabled={isLoading || isSaving}>
-                    Pesquisar
-                  </button>
-                  <button
-                    className="button ghost"
-                    type="button"
-                    onClick={clearFilters}
-                    disabled={isLoading || isSaving}
-                  >
-                    Limpar filtros
-                  </button>
-                </div>
-              </div>
+            </div>
+
+            <div className="button-row">
+              <button className="button primary" type="submit" disabled={isLoading || isSaving}>
+                Pesquisar
+              </button>
+              <button
+                className="button ghost"
+                type="button"
+                onClick={clearFilters}
+                disabled={isLoading || isSaving}
+              >
+                Limpar filtros
+              </button>
             </div>
           </form>
-        </section>
+        </article>
 
-        <section className="panel">
+        <article className="panel form-panel">
           <div className="panel-header">
             <div>
               <h2>Cadastro</h2>
@@ -348,7 +361,7 @@ export function ClientDirectory() {
             </div>
           </div>
 
-          <form className="stack" onSubmit={submitForm}>
+          <form className="form-stack" onSubmit={submitForm}>
             <div className="field">
               <label htmlFor="nome">Nome do cliente</label>
               <input
@@ -398,11 +411,11 @@ export function ClientDirectory() {
               </button>
             </div>
           </form>
-        </section>
-      </div>
+        </article>
+      </section>
 
-      <section className="panel">
-        <div className="panel-header">
+      <section className="panel records-panel">
+        <div className="panel-header records-header">
           <div>
             <h2>Registros</h2>
             <p>Lista principal do CRUD, com edição e exclusão por linha.</p>
