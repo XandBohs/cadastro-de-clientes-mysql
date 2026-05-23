@@ -226,8 +226,8 @@ export function ClientDirectory() {
           <div className="eyebrow">Supabase + Vercel</div>
           <h1>Cadastro de clientes</h1>
           <p>
-            Interface migrada do CRUD em PHP para uma aplicação Next.js hospedada na Vercel, com
-            banco no Supabase e rotas servidoras para manter o acesso ao banco fora do browser.
+            Aplicação Next.js hospedada na Vercel, com banco no Supabase e rotas servidoras para
+            manter o acesso ao banco fora do browser.
           </p>
           <div className="hero-meta">
             <span className="chip">Tabela: dadoscliente</span>

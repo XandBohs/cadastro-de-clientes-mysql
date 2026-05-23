@@ -1,6 +1,6 @@
 # Cadastro de clientes com Supabase e Vercel
 
-Migração do CRUD em PHP/MySQL para uma app Next.js pronta para deploy na Vercel.
+Aplicação Next.js pronta para deploy na Vercel com Supabase como banco de dados.
 
 ## Stack
 
@@ -64,4 +64,4 @@ Importante: na Vercel, variáveis novas ou alteradas só entram em vigor em depl
 
 ## Observação
 
-O projeto antigo em PHP pode ser mantido como referência, mas a versão nova usa as rotas do Next.js como backend para falar com Supabase.
+Este repositório contém apenas a versão nova da aplicação, baseada em Next.js e Supabase.
