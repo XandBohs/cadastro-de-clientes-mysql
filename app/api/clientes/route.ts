@@ -1,4 +1,9 @@
 import { NextResponse } from "next/server";
+import {
+  formatClienteValidationMessage,
+  getClienteValidationError,
+  mapClienteDatabaseError
+} from "@/lib/cliente-validation";
 import { createSupabaseServerClient } from "@/lib/supabase-server";
 import type { ClienteInput } from "@/lib/types";
 
@@ -85,6 +90,14 @@ export async function POST(request: Request) {
       );
     }
 
+    const validationError = getClienteValidationError({ email, telefone });
+    if (validationError) {
+      return NextResponse.json(
+        { error: formatClienteValidationMessage(validationError) },
+        { status: 400 }
+      );
+    }
+
     const { data, error } = await supabase
       .from("dadoscliente")
       .insert({ nome, email, telefone })
@@ -92,7 +105,15 @@ export async function POST(request: Request) {
       .single();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      const friendlyError = mapClienteDatabaseError(error.message);
+      return NextResponse.json(
+        {
+          error: friendlyError
+            ? formatClienteValidationMessage(friendlyError)
+            : error.message
+        },
+        { status: friendlyError ? 400 : 500 }
+      );
     }
 
     return NextResponse.json({ data }, { status: 201 });

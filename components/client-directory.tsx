@@ -2,6 +2,7 @@
 
 import type { ChangeEvent, FormEvent } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { formatClienteValidationMessage, getClienteValidationError } from "@/lib/cliente-validation";
 import type { Cliente, ClienteInput } from "@/lib/types";
 
 type FormState = ClienteInput;
@@ -140,6 +141,15 @@ export function ClientDirectory() {
     setNotice(null);
 
     try {
+      const validationError = getClienteValidationError({
+        email: draft.email,
+        telefone: draft.telefone
+      });
+
+      if (validationError) {
+        throw new Error(formatClienteValidationMessage(validationError));
+      }
+
       const payload = {
         nome: draft.nome.trim(),
         email: draft.email.trim(),
@@ -384,17 +394,20 @@ export function ClientDirectory() {
                 placeholder="Digite o email"
                 autoComplete="email"
               />
+              <small>Padrão: nome@dominio.com</small>
             </div>
             <div className="field">
               <label htmlFor="telefone">Telefone do cliente</label>
               <input
                 id="telefone"
                 name="telefone"
+                type="tel"
                 value={draft.telefone}
                 onChange={(event) => onFieldChange(event, "form")}
                 placeholder="Digite o telefone"
                 autoComplete="tel"
               />
+              <small>Padrão: 10 ou 11 dígitos com DDD, por exemplo 11999999999</small>
             </div>
 
             <div className="button-row">
