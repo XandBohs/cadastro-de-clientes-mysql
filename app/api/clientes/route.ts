@@ -32,7 +32,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const filters = buildQuery(searchParams);
 
-    let query = supabase.from("dadoscliente").select("id,nome,email,telefone,dt").order("id", {
+    let query = supabase.from("dadoscliente").select("id,nome,email,telefone,criado_em").order("id", {
       ascending: false
     });
 
@@ -49,11 +49,11 @@ export async function GET(request: Request) {
     }
 
     if (filters.df) {
-      query = query.gte("dt", `${filters.df}T00:00:00`);
+      query = query.gte("criado_em", `${filters.df}T00:00:00`);
     }
 
     if (filters.dt) {
-      query = query.lte("dt", `${filters.dt}T23:59:59.999`);
+      query = query.lte("criado_em", `${filters.dt}T23:59:59.999`);
     }
 
     const { data, error } = await query.limit(500);
@@ -88,7 +88,7 @@ export async function POST(request: Request) {
     const { data, error } = await supabase
       .from("dadoscliente")
       .insert({ nome, email, telefone })
-      .select("id,nome,email,telefone,dt")
+      .select("id,nome,email,telefone,criado_em")
       .single();
 
     if (error) {

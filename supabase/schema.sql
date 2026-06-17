@@ -3,13 +3,13 @@ create table if not exists public.dadoscliente (
   nome varchar(120) not null,
   email varchar(120) not null,
   telefone varchar(20) not null,
-  dt timestamptz not null default now()
+  criado_em timestamptz not null default now()
 );
 
 create index if not exists dadoscliente_nome_idx on public.dadoscliente (nome);
 create index if not exists dadoscliente_email_idx on public.dadoscliente (email);
 create index if not exists dadoscliente_telefone_idx on public.dadoscliente (telefone);
-create index if not exists dadoscliente_dt_idx on public.dadoscliente (dt desc);
+create index if not exists dadoscliente_criado_em_idx on public.dadoscliente (criado_em desc);
 
 grant usage on schema public to anon, authenticated;
 grant select, insert, update, delete on table public.dadoscliente to anon, authenticated;

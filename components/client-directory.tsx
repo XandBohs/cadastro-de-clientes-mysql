@@ -54,7 +54,7 @@ export function ClientDirectory() {
   const [notice, setNotice] = useState<string | null>(null);
 
   const total = records.length;
-  const latest = useMemo(() => records[0]?.dt ?? null, [records]);
+  const latest = useMemo(() => records[0]?.criado_em ?? null, [records]);
 
   const loadRecords = useCallback(
     async (nextFilters: Filters = filters) => {
@@ -244,7 +244,7 @@ export function ClientDirectory() {
           </p>
           <div className="hero-meta">
             <span className="chip">Tabela: dadoscliente</span>
-            <span className="chip">Campos: nome, email, telefone, dt</span>
+            <span className="chip">Campos: nome, email, telefone, criado_em</span>
             <span className="chip">CRUD completo</span>
           </div>
         </section>
@@ -455,7 +455,7 @@ export function ClientDirectory() {
                   <td>{record.nome}</td>
                   <td>{record.email}</td>
                   <td>{record.telefone}</td>
-                  <td>{formatDate(record.dt)}</td>
+                  <td>{formatDate(record.criado_em)}</td>
                   <td>
                     <div className="row-actions">
                       <button className="edit" type="button" onClick={() => startEdit(record)}>

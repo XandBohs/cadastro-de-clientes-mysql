@@ -28,7 +28,7 @@ export async function PUT(request: Request, { params }: Params) {
       .from("dadoscliente")
       .update({ nome, email, telefone })
       .eq("id", Number(id))
-      .select("id,nome,email,telefone,dt")
+      .select("id,nome,email,telefone,criado_em")
       .single();
 
     if (error) {

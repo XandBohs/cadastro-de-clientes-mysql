@@ -4,18 +4,14 @@ import { type NextRequest, NextResponse } from "next/server";
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-export const updateSession = (request: NextRequest) => {
+export const createClient = (request: NextRequest) => {
   let supabaseResponse = NextResponse.next({
     request: {
       headers: request.headers
     }
   });
 
-  if (!supabaseUrl || !supabaseKey) {
-    return supabaseResponse;
-  }
-
-  const supabase = createServerClient(supabaseUrl, supabaseKey, {
+  const supabase = createServerClient(supabaseUrl!, supabaseKey!, {
     cookies: {
       getAll() {
         return request.cookies.getAll();
@@ -36,3 +32,5 @@ export const updateSession = (request: NextRequest) => {
 
   return supabaseResponse;
 };
+
+export const updateSession = createClient;

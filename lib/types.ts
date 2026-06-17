@@ -3,7 +3,7 @@ export type Cliente = {
   nome: string;
   email: string;
   telefone: string;
-  dt: string;
+  criado_em: string;
 };
 
 export type ClienteInput = {
